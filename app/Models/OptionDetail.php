@@ -15,4 +15,8 @@ class OptionDetail extends Model
     public function option(){
         return $this->belongsTo(Option::class ,'option_id');
     }
+
+    public function productOptionDetail(){
+        return $this->hasMany(\App\Models\productOptionDetail::class ,'option_detail_id');
+    }
 }

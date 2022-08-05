@@ -26,7 +26,6 @@ class CheckAdmin
             }else{
                 return redirect()->route('admin.index');
             }
-
         } else {
             return redirect()->route('login.login');
         }

@@ -19,10 +19,9 @@
             <h3 class="commom-title">Tất cả sản phẩm</h3>
         </div>
         <div class="selected-box">
-            <select class="select" name="" id="">
-                <option value="">Mới nhất</option>
-                <option value="">Gần đây</option>
-                <option value="">Bán chạy nhất</option>
+            <select class="select" id="filter-select" name="" id="">
+                <option value="1">Mới nhất</option>
+                <option value="2">Cũ nhất</option>
             </select>
         </div>
     </header>
@@ -38,7 +37,7 @@
                 <ul>
                     <li><a href=""><i class="fa-solid fa-caret-right"></i> Tất cả sản phẩm</a></li>
                     @foreach ($rooms as $item)
-                    <li><a href=""><i class="fa-solid fa-caret-right"></i>{{$item->name}}</a></li>
+                    <li class="room-item" style="cursor:pointer"  data-id="{{$item->id}}"><a><i class="fa-solid fa-caret-right"></i>{{$item->name}}</a></li>
                     @endforeach
                 </ul>
             </div>
@@ -47,7 +46,7 @@
             <div class="panel">
                 <ul>
                     @foreach ($cates as $item)
-                    <li><a href=""><i class="fa-solid fa-registered"></i>{{$item->name}}i</a></li>
+                    <li class="cate-item" style="cursor:pointer"  data-id="{{$item->id}}"><a  ><i class="fa-solid fa-registered"></i>{{$item->name}}</a></li>
                     @endforeach
                 </ul>
             </div>
@@ -76,16 +75,15 @@
         @foreach ($products as $item)
         <div class="product-item">
             <div class="product-item_img-box">
-                <a href="{{route('productdetail')}}">
+                <a href="{{route('client.product.detail' , $item->id)}}">
                     <img class="w-100" src="{{ asset('upload/' . $item->image) }}" alt="">
                 </a>
-                <div class="product-item_percent">-{{(ceil($item->price - $item->price_sale) * 100/$item->price)}}%</div>
-                <a href="{{route('productdetail')}}" class="product-item_icon">
+                <div class="product-item_percent">-{{ceil(($item->price - $item->price_sale) * 100/$item->price)}}%</div>
+                <a href="{{route('client.product.detail' , $item->id)}}" class="product-item_icon">
                     <i class="fa-solid fa-magnifying-glass-plus"></i>
                 </a>
             </div>
-            <!-- {{$item->quantity_view}} -->
-            <p class="product-item_name"><a href="{{route('productdetail')}}">{{$item->name}}</a></p>
+            <p class="product-item_name"><a href="{{route('client.product.detail' , $item->id)}}">{{$item->name}}</a></p>
             <div class="product-item_price-wraper">
                 <div class="product-price-main">
                     <?=number_format($item->price_sale, 0 , '.')?>₫
@@ -93,7 +91,6 @@
                 <div class="product-price_sale">
                     <?=number_format($item->price, 0 , '.')?>₫
                 </div>
-             
             </div>
         </div>
         @endforeach
@@ -106,4 +103,35 @@
 @endsection
 @section('script')
 <script src="{{asset('assets/client/js/filter-product.js')}}"></script>
+<script>
+    $(document).ready(function() {
+        $('#filter-select').on('change', function() {
+            let valueSelect=  $(this).val();
+            $.get("<?= route('client.product.filterSelect') ?>", {
+                valueSelect: valueSelect,
+            }, function($data) {
+                $('.product-list_box').html($data);
+        });
+
+   
+    });
+    
+    $('.cate-item').on('click' , function(){
+        let cate_id =  $(this).data('id');
+        $.get("<?= route('client.product.filterCate') ?>", {
+            cate_id: cate_id
+        }, function($data) {
+        $('.product-list_box').html($data);
+        })
+    });
+    $('.room-item').on('click' , function(){
+        let room_id =  $(this).data('id');
+        $.get("<?= route('client.product.filterRoom') ?>", {
+            room_id: room_id
+        }, function($data) {
+        $('.product-list_box').html($data);
+        })
+    });
+})
+</script>
 @endsection

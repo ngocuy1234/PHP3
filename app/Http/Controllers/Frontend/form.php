@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\DemoMail;
 use App\Models\User;
+use App\Models\productUser;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreLogin;
 use App\Http\Requests\StoreRegister;
@@ -29,7 +30,7 @@ class form extends Controller
     // Save Register
     public function register(StoreRegister $request){
         $validated = $request->validated();
-       try {
+       
         $user = new User();
         $arrResquest = $request->all();
         $passEncryption = password_hash($request->password ,PASSWORD_DEFAULT); 
@@ -44,11 +45,9 @@ class form extends Controller
         $user->role = 2;
         $user->fill($request->all());
         $user->save();
+  
         session()->put('success' ,  'Register success !!!');
         return redirect()->route('login.login');
-       } catch (\Throwable $th) {
-        session()->put('error' ,  'Register error !!!');
-       }
     }
 
     public function login(StoreLogin $request){
@@ -61,10 +60,17 @@ class form extends Controller
     }
 
     public function logOut(Request $request){
+       
+        $productViewed = productUser::with('product_user')
+        ->where('product_user.user_id', Auth::id())->get();
+        if($productViewed){
+            foreach($productViewed as $item){
+                productUser::find($item->id)->delete();
+            }
+        }
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect()->back();
     }
 }

@@ -261,6 +261,11 @@ input[type=number]::-webkit-outer-spin-button {
   border-bottom: 2px solid transparent;
 }
 
+.product-item_img-box img{
+  height: 230px;
+  object-fit: cover;
+}
+
 .tabcontent {
   /* display: none; */
   margin-top: 20px;

@@ -123,17 +123,17 @@ class adminProduct extends Controller
     }
 
 
-    // public function  propertieDetailSave($id){
-    //     try {
-    //         $optionDer = OptionDetail::find($id);
-    //         if($optionDer){
-    //             $optionDer->delete();
-    //             return redirect()->back()->with('success' , 'Delete success !!!');
-    //         }
-    //     } catch (\Throwable $th) {
-    //         return redirect()->back()->with('error' , 'Delete error !!!');
-    //     }
-    // }
+    public function  propertieDetailSave($id){
+        try {
+            $optionDer = OptionDetail::find($id);
+            if($optionDer){
+                $optionDer->delete();
+                return redirect()->back()->with('success' , 'Delete success !!!');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error' , 'Delete error !!!');
+        }
+    }
 
     public function propertieDelete($id){
        try {
@@ -174,23 +174,24 @@ class adminProduct extends Controller
 
 
     public function distortionStore(Request $request){
-        // dd($request->all());
         $distortie = new ProductOption();
-        $proOptionDetail = new ProductOptionDetail();
+        
         if($request->hasFile('image')){
             $file = $request->image;
             $filename =  $file->getClientoriginalName();
            $file->move(public_path('/upload'), $filename);
           }
-        
+
+          $distortie->image =  $filename;
           $distortie->fill($request->all());
           $distortie->save();
-          $idProductAfter =  $distortie->id;
+
           foreach ($request->distortie as $i) { 
+            $proOptionDetail = new ProductOptionDetail();
             $proOptionDetail->option_detail_id = $i;
-            $proOptionDetail->product_option_id =  $idProductAfter;
+            $proOptionDetail->product_option_id =  $distortie->id;
+            $proOptionDetail->save();
           };
-          $proOptionDetail->save();
-          dd('success');
+     
         }
 }

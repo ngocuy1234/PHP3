@@ -91,7 +91,10 @@ Route::get('/lien-he' , [Contact::class ,'index'])->name('contact');
 
 Route::prefix('/san-pham')->name('client.product.')->group(function(){
     Route::get('/' , [Product::class ,'index'])->name('product');
-    Route::get('/{id}' , [Product::class ,'detail'])->name('detail');
+    Route::get('/detail/{id}' , [Product::class ,'detail'])->name('detail');
+    Route::get('/filter-select' , [Product::class ,'filterSelect'])->name('filterSelect');
+    Route::get('/filter-cate' , [Product::class ,'filterCate'])->name('filterCate');
+    Route::get('/filter-room' , [Product::class ,'filterRoom'])->name('filterRoom');
 });
 
 

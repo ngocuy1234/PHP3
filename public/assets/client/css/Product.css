@@ -18,6 +18,11 @@
     cursor: pointer;
 }
 
+.product-item img{
+    height: 230px;
+    object-fit: cover;
+}
+
 .product-item_name a:hover {
     color: var(--color-primary);
 }
