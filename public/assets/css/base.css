@@ -11,6 +11,10 @@ body {
     /* height: 2000px; */
 }
 
+a{
+    text-decoration: none;
+}
+
 :root {
     --color-primary: #0975f5;
     --color-sub: #1fb5d4;

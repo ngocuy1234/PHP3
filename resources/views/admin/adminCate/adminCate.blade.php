@@ -130,7 +130,6 @@ $(document).ready(function() {
             status: status
         }, function($data) {
             configAlert($data);
-            // $('#message').html($data);
         })
     });
 

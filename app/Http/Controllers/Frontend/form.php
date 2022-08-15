@@ -15,6 +15,7 @@ use App\Models\productUser;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreLogin;
 use App\Http\Requests\StoreRegister;
+use Laravel\Socialite\Facades\Socialite;
 
 class form extends Controller
 {
@@ -50,17 +51,38 @@ class form extends Controller
         return redirect()->route('login.login');
     }
 
+    public function getLoginGoogle(){
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function saveLoginGoogle(){
+        $ggUser =  Socialite::driver('google')->user();
+ 
+        $user = User::where('email' , $ggUser->email)->first();
+        if($user){
+            Auth::login($user);
+            return redirect()->route('home');
+        }else{
+           $newUser = new User();
+           $newUser->avatar = $ggUser->user['picture'];
+           $newUser->email = $ggUser->email;
+           $newUser->name = $ggUser->user['given_name'];
+           $newUser->role = 2;
+           $newUser->save();
+           Auth::login($newUser->find($newUser->id));
+           return redirect()->route('home');
+        }
+    }
+
     public function login(StoreLogin $request){
         $validated = $request->validated();
         if (Auth::attempt(['email' => $request->email_username, 'password' => $request->password])) {
             return redirect()->route('home');
         }
-        
         return redirect()->route('login.login');
     }
 
     public function logOut(Request $request){
-       
         $productViewed = productUser::with('product_user')
         ->where('product_user.user_id', Auth::id())->get();
         if($productViewed){

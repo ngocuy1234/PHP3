@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('product_options', function($table) {
-            $table->dropColumn('option_value');
+        Schema::table('order_detail', function($table) {
+            $table->string('atribute');
+            $table->string('image');
         });
     }
 

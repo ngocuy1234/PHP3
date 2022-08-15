@@ -38,12 +38,14 @@
                 <a href="{{route('client.product.detail' , $item->id)}}">
                     <img class="w-100" src="{{ asset('upload/' . $item->image) }}" alt="">
                 </a>
-                <div class="product-item_percent">-{{ceil(($item->price - $item->price_sale) * 100/$item->price)}}%</div>
+                <div class="product-item_percent">-{{ceil(($item->price - $item->price_sale) * 100/$item->price)}}%
+                </div>
                 <a href="{{route('client.product.detail' , $item->id)}}" class="product-item_icon">
                     <i class="fa-solid fa-magnifying-glass-plus"></i>
                 </a>
             </div>
-            <p class="product-item_name"><a href="{{route('client.product.detail' , $item->id)}}">{{$item->name}}</a></p>
+            <p class="product-item_name"><a href="{{route('client.product.detail' , $item->id)}}">{{$item->name}}</a>
+            </p>
             <div class="product-item_price-wraper">
                 <div class="product-price-main">
                     <?=number_format($item->price_sale, 0 , '.')?>₫
@@ -67,13 +69,15 @@
                 <a href="{{route('client.product.detail' , $item->id)}}">
                     <img class="w-100" src="{{ asset('upload/' . $item->image) }}" alt="">
                 </a>
-                <div class="product-item_percent">-{{(ceil($item->price - $item->price_sale) * 100/$item->price)}}%</div>
+                <div class="product-item_percent">-{{ceil(($item->price - $item->price_sale) * 100/$item->price)}}%
+                </div>
                 <a href="{{route('client.product.detail' , $item->id)}}" class="product-item_icon">
                     <i class="fa-solid fa-magnifying-glass-plus"></i>
                 </a>
             </div>
             <!-- {{$item->quantity_view}} -->
-            <p class="product-item_name"><a href="{{route('client.product.detail' , $item->id)}}">{{$item->name}}</a></p>
+            <p class="product-item_name"><a href="{{route('client.product.detail' , $item->id)}}">{{$item->name}}</a>
+            </p>
             <div class="product-item_price-wraper">
                 <div class="product-price-main">
                     <?=number_format($item->price_sale, 0 , '.')?>₫
@@ -81,7 +85,7 @@
                 <div class="product-price_sale">
                     <?=number_format($item->price, 0 , '.')?>₫
                 </div>
-             
+
             </div>
         </div>
         @endforeach
@@ -148,4 +152,5 @@
         </div>
     </div>
 </div>
+
 @endsection

@@ -221,7 +221,6 @@
             icon: 'warning',
             title: '<?= session('error') ?>',
             timer: 3000,
-
         })
 
         <?php

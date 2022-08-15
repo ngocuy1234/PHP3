@@ -24,38 +24,53 @@
             </div>
         </div>
         <div class="content-product-info_right">
-            <div class="header-product-info_right">
-                <h3 class="product-name">{{$product->name}}</h3>
-                <div class="product-sale">-{{(ceil($product->price - $product->price_sale) * 100/$product->price)}}%
+            <form action="{{route('cart.addCart')}}" method="POST">
+                @csrf
+                <input hidden name="id" value="{{$product->id}}" type="text">
+                <div class="header-product-info_right">
+                    <h3 class="product-name">{{$product->name}}</h3>
+                    <div class="product-sale">-{{ceil(($product->price - $product->price_sale) * 100/$product->price)}}%
+                    </div>
                 </div>
-            </div>
-            <div class="product-item_price-wraper">
-                <div class="product-price-main">
-                    <?=number_format($product->price_sale, 0 , '.')?>₫
+                <div class="product-item_price-wraper">
+                    <div class="product-price-main">
+                        <?=number_format($product->price_sale, 0 , '.')?>₫
+                    </div>
+                    <div class="product-price_sale color-text">
+                        <?=number_format($product->price, 0 , '.')?>₫
+                    </div>
                 </div>
-                <div class="product-price_sale color-text">
-                    <?=number_format($product->price, 0 , '.')?>₫
+                <div class="product-atribute_box">
+                    <p>{{$size->name}} : </p>
+                    <ul class="product-atribute_list-size">
+                        @foreach ($size->optionDetail as $item)
+                            <label data-id="2"  class="lable-size" for="{{$item->name}}">{{$item->name}}</label>
+                            <input id="{{$item->name}}" hidden  class="size" value="{{$item->name}}" name="size" type="radio">
+                        @endforeach
+                    </ul>
                 </div>
-            </div>
-            <div class="product-atribute_box">
-                <p>Màu sắc : </p>
-                <ul class="product-atribute_list-color">
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-            </div>
-            <p class="alert-product-number">Còn {{$product->quantity}} sản phẩm</p>
-            <div class="">
-                <div class="number-input">
-                    <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"><i
-                            class="fa-solid fa-minus"></i></button>
-                    <input class="quantity" min="0" name="quantity" value="1" type="number">
-                    <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"><i
-                            class="fa-solid fa-plus"></i></button>
+                <div class="product-atribute_box">
+                    <p>{{$color->name}} : </p>
+                    <ul class="product-atribute_list-color">
+                    @foreach ($color->optionDetail as $item)
+                        <label for="{{$item->name}}" style="background-color: <?= $item->code_color ?>"></label>
+                        <input id="{{$item->name}}" hidden name="color" value="{{$item->name}}" type="radio">
+                    @endforeach
+                      
+                    </ul>
                 </div>
-                <button class="btn-add-to-cart">Thêm giỏ hàng</button>
-            </div>
+                <p class="alert-product-number">Còn {{$product->quantity}} sản phẩm</p>
+                <div class="">
+                    <div class="number-input">
+                        <a onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                            class="minus"><i class="fa-solid fa-minus"></i></a>
+                        <input class="quantity" min="0" name="quantity" value="1" type="number">
+                        <a onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"><i
+                                class="fa-solid fa-plus"></i></a>
+                    </div>
+                    <button class="btn-add-to-cart">Thêm giỏ hàng</button>
+                </div>
+            </form>
             <div class="tabs1">
                 <div class="tab-item active tablinks" id="defaultOpen" onclick="openCity(event, 'London')">Mô tả
                 </div>
@@ -89,7 +104,7 @@
                 <a href="{{route('client.product.detail' , $item->id)}}">
                     <img class="w-100" src="{{ asset('upload/' . $item->image) }}" alt="">
                 </a>
-                <div class="product-item_percent">-{{(ceil($item->price - $item->price_sale) * 100/$item->price)}}%
+                <div class="product-item_percent">-{{ceil(($item->price - $item->price_sale) * 100/$item->price)}}%
                 </div>
                 <a href="{{route('client.product.detail' , $item->id)}}" class="product-item_icon">
                     <i class="fa-solid fa-magnifying-glass-plus"></i>
@@ -115,7 +130,7 @@
     <!-- ----------------- -->
     @if (count($productViewed) != 0)
     <h3 style="text-transform: uppercase" class="commom-title product-related_title text-center">
-    Sản phẩm đã xem
+        Sản phẩm đã xem
     </h3>
     <p class="text-center color-text">Sản phẩm bạn vừa xem.</p>
     <div class="product-related_box padding-container product-list_box">
@@ -125,7 +140,7 @@
                 <a href="{{route('client.product.detail' , $item->id)}}">
                     <img class="w-100" src="{{ asset('upload/' . $item->image) }}" alt="">
                 </a>
-                <div class="product-item_percent">-{{(ceil($item->price - $item->price_sale) * 100/$item->price)}}%
+                <div class="product-item_percent">-{{ceil(($item->price - $item->price_sale) * 100/$item->price)}}%
                 </div>
                 <a href="{{route('client.product.detail' , $item->id)}}" class="product-item_icon">
                     <i class="fa-solid fa-magnifying-glass-plus"></i>
@@ -152,4 +167,7 @@
 @section('script')
 <script src="{{asset('assets/client/js/tab-component.js')}}"></script>
 <script src="{{asset('assets/client/js/tab-slider.js')}}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script>
+</script>
 @endsection

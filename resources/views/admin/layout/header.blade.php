@@ -59,7 +59,7 @@
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
         <li class="menu-item active">
-            <a href="index.html" class="menu-link">
+            <a href="{{route('admin.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Trang chính</div>
             </a>
@@ -106,7 +106,16 @@
         @if (auth()->user()->role == 1)
         <li class="menu-item">
             <a href="{{route('staff.index')}}" class="menu-link">
-                <i class="bx bx-user me-2"></i>
+                <i class='bx bxs-user-detail'></i>
+                <div data-i18n="Layouts">&nbsp;&nbsp;&nbsp;Staff</div>
+            </a>
+        </li>
+        @endif
+
+        @if (auth()->user()->role == 1)
+        <li class="menu-item">
+            <a href="{{route('staff.index')}}" class="menu-link">
+               <i class='bx bxs-user'></i>
                 <div data-i18n="Layouts">&nbsp;&nbsp;&nbsp;User</div>
             </a>
         </li>
@@ -120,4 +129,14 @@
             </a>
         </li>
         @endif
+
+        @if (auth()->user()->role == 1)
+        <li class="menu-item">
+            <a href="{{route('order.index')}}" class="menu-link">
+                <i class='bx bxs-food-menu'></i>
+                <div data-i18n="Layouts">&nbsp;&nbsp;&nbsp;&nbsp;Order</div>
+            </a>
+        </li>
+        @endif
+
 </aside>

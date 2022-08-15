@@ -9,6 +9,8 @@
         <form action="" class="header-search_form-box">
             <input class="header-search_form-input" type="text" placeholder="Tìm kiếm sản phẩm">
             <button class="header-search_btn-primary"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <div class="product-result-search">
+            </div>
         </form>
         <div class="header-phone header-main_sub">
             <p><i class="fa-solid icon fa-square-phone"></i></p>
@@ -34,15 +36,13 @@
         @else
         <div class="header-login dropdown">
             <div onclick="dropdown()" class="header-main_sub dropbtn">
-                <img class="header-info-user-img"
-                    src="{{ asset('upload/'. auth()->user()->avatar) ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYmkp9a2rrD1Sskb9HLt5mDaTt4QaIs8CcBg&usqp=CAU' }}"
-                    alt="">
+                <img class="header-info-user-img" src="{{ asset('upload/' . auth()->user()->avatar ) }}" alt="">
                 <div class="header-info-user-name" style="margin-left: 15px;">
                     <p>{{ auth()->user()->name }}</p>
                 </div>
             </div>
             <div id="myDropdown" class="dropdown-content">
-                <a href="#">Thông tin</a>
+                <a href="{{route('profile.index')}}">Thông tin</a>
                 <a href="#">Hoá đơn</a>
                 <a href="{{route('logOut')}}">Đăng xuất</a>
             </div>
@@ -52,7 +52,12 @@
         <div onclick="openNav()" class="header-cart header-main_sub">
             <div class="header-icon-cart">
                 <p><i class="fa-solid icon fa-cart-shopping"></i></p>
+                @if (session()->exists('cart'))
+                <span><?=count(session('cart'))?></span>
+                @else
                 <span>0</span>
+                @endif
+
             </div>
             <div class="">
                 <p>Giỏ hàng
@@ -62,48 +67,28 @@
         <div id="mySidenav" class="sidenav cart-list-info">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <div class="" style="padding: 0px 20px ;border-top:1px solid #ccc;">
-                <h4 style="margin-top: 10px;">Tổng số : 10</h4>
+                @if (session()->exists('cart'))
+                <h4 style="margin-top: 10px;">Tổng số : <?=count(session('cart'))?> </h4>
+                <?php $sum = 0; ?>
+                @foreach (session('cart') as $item)
+                <?php  $sum+=$item['number'] * $item['price'] ?>
                 <div class="cart-list-item">
-                    <img class="cart-list-item-img "
-                        src="https://product.hstatic.net/1000409762/product/sp11-2_d58d2329380c41f1885a093a5cf2f27c_large.jpg"
-                        alt="">
-                    <div class="">
-                        <p class="cart-list-item-name">Ghế sofa giường kéo Roots</p>
-                        <p class="cart-list-item-price">890,000₫ <span>(4)</span></p>
+                    <div class="" style="display:flex;justify-content: start">
+                        <img class="cart-list-item-img " src="{{asset('upload/' .  $item['img'])}}" alt="">
+                        <div class="" style="margin-left:20px">
+                            <p class="cart-list-item-name">{{ $item['name']}}</p>
+                            <p class="cart-list-item-price">{{$item['price']}}₫ <span>({{$item['number']}})</span></p>
+                        </div>
                     </div>
-                    <a href="" class="btn-cart-delete"><i class="fa-solid fa-trash-can"></i></a>
+                    <a onclick="return confirm('Bạn có muốn xoá sản phẩm này ?')" href="{{route('cart.deleteCart' , $item['id'])}}" class="btn-cart-delete"><i class="fa-solid fa-trash-can"></i></a>
                 </div>
-                <div class="cart-list-item">
-                    <img class="cart-list-item-img "
-                        src="https://product.hstatic.net/1000409762/product/sp11-2_d58d2329380c41f1885a093a5cf2f27c_large.jpg"
-                        alt="">
-                    <div class="">
-                        <p class="cart-list-item-name">Ghế sofa giường kéo Roots</p>
-                        <p class="cart-list-item-price">890,000₫ <span>(4)</span></p>
-                    </div>
-                    <a href="" class="btn-cart-delete"><i class="fa-solid fa-trash-can"></i></a>
-                </div>
-                <div class="cart-list-item">
-                    <img class="cart-list-item-img "
-                        src="https://product.hstatic.net/1000409762/product/sp11-2_d58d2329380c41f1885a093a5cf2f27c_large.jpg"
-                        alt="">
-                    <div class="">
-                        <p class="cart-list-item-name">Ghế sofa giường kéo Roots</p>
-                        <p class="cart-list-item-price">890,000₫ <span>(4)</span></p>
-                    </div>
-                    <a href="" class="btn-cart-delete"><i class="fa-solid fa-trash-can"></i></a>
-                </div>
-                <div class="cart-list-item">
-                    <img class="cart-list-item-img "
-                        src="https://product.hstatic.net/1000409762/product/sp11-2_d58d2329380c41f1885a093a5cf2f27c_large.jpg"
-                        alt="">
-                    <div class="">
-                        <p class="cart-list-item-name">Ghế sofa giường kéo Roots</p>
-                        <p class="cart-list-item-price">890,000₫ <span>(4)</span></p>
-                    </div>
-                    <a href="" class="btn-cart-delete"><i class="fa-solid fa-trash-can"></i></a>
-                </div>
-                <button class="cart-list-view">Xem giỏ hàng </button>
+                @endforeach
+                <h4 style="margin-top: 10px;"> Tổng tiền : <?=number_format($sum, 0 , '.')?>₫ </h4>
+                @else
+                <span>Giỏ hàng hiện đang trống !!!</span>
+                @endif
+
+                <button class="cart-list-view"><a href="{{route('cart.cart')}}" style="text-decoration:none;color:blue">Xem giỏ hàng </a></button>
             </div>
         </div>
     </div>
@@ -120,3 +105,24 @@
         </ul>
     </div>
 </header>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script>
+$(document).ready(function() {
+    $('.header-search_form-input').on('keyup', function() {
+        let keyword = $(this).val();
+        $('.product-result-search').css('display', 'block');
+        $.get("<?= route('client.product.filterSearch') ?>", {
+            keyword: keyword
+        }, function($data) {
+            $('.product-result-search').html($data);
+        });
+    });
+
+    $('.header-search_form-input').on('blur', function() {
+        setTimeout(() => {
+            $('.product-result-search').css('display', 'none');
+        }, 1000);
+    })
+});
+</script>

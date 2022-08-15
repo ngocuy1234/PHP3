@@ -16,8 +16,7 @@ class Dashboard extends Controller
         $category = Category::all()->count();
         $product = Product::all()->count();
         $staff = User::where('users.role' , 1)->orWhere('users.role' , 0)->get()->count();
-        $chart = Category::select('categories.name',
-        Product::raw("COUNT(products.cate_id) as number_cate"))
+        $chart = Category::select('categories.name', Product::raw("COUNT(products.cate_id) as number_cate"))
         ->join('products', 'products.cate_id', '=', 'categories.id')
         ->groupBy("products.cate_id", "categories.name")->get();
 

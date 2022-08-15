@@ -62,7 +62,7 @@
         <?php if (session()->exists('error')) { ?>
 
         Swal.fire({
-            position: 'bottom-end',
+            position: 'center',
             icon: 'warning',
             title: '<?= session('error') ?>',
             timer: 3000,
@@ -73,7 +73,7 @@
         session()->forget('error');
     } elseif (session()->exists('success')) { ?>
         Swal.fire({
-            position: 'bottom-end',
+            position: 'center',
             icon: 'success',
             title: '<?= session('success') ?>',
             showConfirmButton: false,

@@ -15,7 +15,6 @@ class adminProduct extends Controller
 {
     public function index(){
         $product = Product::orderby('products.id' , 'desc')->paginate(request('limit') ?? 5 );
-        // dd($product);
         return view('admin.adminProduct.adminProduct' , ['products' => $product]);
     }
 
@@ -52,9 +51,8 @@ class adminProduct extends Controller
 
     public function store(Request $request){
         // dd($request->all());
-          try {
+        
             $product = new Product();
-            $filename;
             if($request->hasFile('image')){
               $file = $request->image;
               $filename =  $file->getClientoriginalName();
@@ -63,10 +61,8 @@ class adminProduct extends Controller
             $product->image = $filename;
             $product->fill($request->all());
             $product->save();
-            return redirect()->back()->with('save-success-product' , 'Add product success !!!');
-          } catch (\Throwable $th) {
-            return redirect()->back()->with('error' , 'Add product error !!!');
-          }
+            return redirect()->route('product.index')->with('success' , 'Add product success !!!');
+       
     }
 
     public function  edit($id){
@@ -77,8 +73,8 @@ class adminProduct extends Controller
 
     public function detail($id){
        $detail = Product::find($id);
-    //    dd($product);
-       return view('admin.adminProduct.detail' , ['detail' => $detail] );
+       $properties =  ProductOption::where('product_id' , $id)->get()->count();
+       return view('admin.adminProduct.detail' , ['detail' => $detail , 'countProperties' => $properties] );
     }
 
     public function propertie(){
@@ -192,6 +188,12 @@ class adminProduct extends Controller
             $proOptionDetail->product_option_id =  $distortie->id;
             $proOptionDetail->save();
           };
-     
+
+          $product = Product::find($distortie->product_id);
+    
+          $product->quantity_distortion = $product->quantity_distortion - 1;
+          $product->save();
+
+          return redirect()->route('product.detail.distortion' , $product->id)->with('success' ,  'Add success !!!');
         }
 }

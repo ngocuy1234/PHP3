@@ -97,6 +97,11 @@
                                 <label class="form-check-label" for="remember-me"> Nhớ mật khẩu </label>
                             </div>
                         </div>
+                        <div class="my-3">
+                            <div class="col-6">
+                                <a class="btn btn-danger text-white" href="{{route('login.getLoginGoogle')}}"><i class='bx bxl-google'></i> Google</a>
+                            </div>
+                        </div>
                         <div class="mb-3">
                             <button class="btn btn-primary d-grid w-100" type="submit">Đăng nhập</button>
                         </div>

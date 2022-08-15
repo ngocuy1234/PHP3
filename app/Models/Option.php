@@ -16,6 +16,4 @@ class Option extends Model
     public function optionDetail(){
         return $this->hasMany(OptionDetail::class ,'option_id' , 'id');
     }
-
-    
 }

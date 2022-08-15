@@ -14,8 +14,11 @@ use Illuminate\Support\Facades\Auth;
 
 class Product extends Controller
 {
+    // protected $productId;
+    
     public function index(){
         $rooms = Room::all();
+
         $cates = Category::all();
         $products = ModelProduct::select('id' , 'name' , 'image' , 'price' , 'price_sale')
         ->orderby('products.id' , 'desc')->paginate(request('limit') ?? 10);
@@ -28,25 +31,12 @@ class Product extends Controller
     }
 
     public function detail($id){
+        $this->productId = $id;
         $product = ModelProduct::with('productOption')->find($id);
-        $productUser = productUser::where('product_id' , $product->id)->where('user_id' , Auth::id())->count();
+        $productUser = productUser::where('product_id' , $id)->where('user_id' , Auth::id())->count();
+        $size = \App\Models\Option::find(12);
+        $color = \App\Models\Option::find(15);
 
-        // $productOption = $product::with(['productOption' => function($q){
-        //     return 
-        // }])->find($id);
-        foreach ($productOption as $item) {
-            $arrProductDetail[] = \App\Models\ProductOptionDetail::where('product_option_id' , $item->id)->get();
-        }
-
-       if($arrProductDetail){
-        foreach($arrProductDetail as $proDe){
-            foreach($proDe as $el){
-                $name = Option::with('optionDetail')->where('optionDetails.id', $el->option_detail_id)->get();
-            }
-        }
-       }
-
-        die;
         if(Auth::check() &&  $productUser==0){
             $productViews = new productUser();
             $productViews->product_id = $product->id;
@@ -61,6 +51,8 @@ class Product extends Controller
         ->get(); 
         return view('client.product-detail' , [
             'product' =>$product,
+            'size' => $size,
+            'color' => $color,
             'productRelate' => $productRelate,
             'productViewed' => $productViewed
         ]);
@@ -76,6 +68,8 @@ class Product extends Controller
            $products =   $query->orderby('products.id' , 'desc')->get();
         }else if($selectValue == 2){
             $products =   $query->orderby('products.id' , 'asc')->get();
+        }else{
+            $products =  ModelProduct::all();
         }
 
         $this->renderAjax($products);
@@ -89,12 +83,12 @@ class Product extends Controller
         $this->renderAjax($product);
     }
 
-    public function filterPrice(){
-        $cate_id = $_GET['valuePrice'] ? $_GET['valuePrice'] : '';
-        $query = ModelProduct::select('id'  ,'name' , 'image' , 'price' , 'price_sale' , 'quantity_view')
-        ->where('products.status' , 1)->where('');
-        $this->renderAjax($product);
-    }
+    // public function filterPrice(){
+    //     $cate_id = $_GET['valuePrice'] ? $_GET['valuePrice'] : '';
+    //     $query = ModelProduct::select('id'  ,'name' , 'image' , 'price' , 'price_sale' , 'quantity_view')
+    //     ->where('products.status' , 1)->where('');
+    //     $this->renderAjax($product);
+    // }
 
     public function filterRoom(){
         $room_id = $_GET['room_id'] ? $_GET['room_id'] : '';
@@ -134,4 +128,31 @@ class Product extends Controller
            </div>";
         };
     }
+
+    function filterSearch(){
+        $keyword = $_GET['keyword'] ? $_GET['keyword'] : '';
+       
+        $product = ModelProduct::where('name' , 'LIKE' ,  '%'.$keyword.'%')->get();
+        // var_dump($product);
+        foreach($product as $item){
+            $image =  asset('upload/' . $item->image);
+            $herf = route('client.product.detail' , $item->id);
+            $price_sale = number_format($item->price_sale, 0 , '.');
+            echo 
+            "<a style='text-decoration:none'  href='". $herf."'>
+                <div class='product-search-item'>
+                <img class='product-search-item-img w-100'
+                src='".$image ."' alt=''>
+                <div class='product-search-item-name' style='font-weigth:bold;color:#000'>
+                    ".$item->name."
+                </div>
+                <h4 class='product-search-item-price'>".$price_sale."₫
+                </h4>
+            </div>
+             <a>";
+        }
+
+    }
+
+ 
 }

@@ -20,6 +20,7 @@
         </div>
         <div class="selected-box">
             <select class="select" id="filter-select" name="" id="">
+                <option value="0">Tất cả sản phẩm</option>
                 <option value="1">Mới nhất</option>
                 <option value="2">Cũ nhất</option>
             </select>

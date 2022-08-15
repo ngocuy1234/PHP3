@@ -12,11 +12,12 @@
                 <thead>
                     <tr class="text-nowrap">
                         <th>Id</th>
-                        <th>Name</th>
+                        
                         <th>Avatar</th>
+                        <th>Name</th>
                         <th>Email</th>
-                        <th>Address</th>
                         <th>Phone</th>
+                        <th>Role</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -26,10 +27,21 @@
                     <tr>
                         <td>{{$item->id}}</td>
                         <td> <img width="40px" src="{{$item->avatar}}" alt="Avatar" class="rounded-circle" /></td>
+                        <td>{{$item->name}}</td>
                         <td>{{$item->email}}</td>
-                        <td>{{$item->address}}</td>
                         <td>{{$item->phone}}</td>
-                        <td>{{$item->address}}</td>
+
+                        <td>
+                            <select class="form-select" data-id="{{$item->id}}" style="width:150px" aria-label="Default select example">
+                                <option @if ($item->role ==  0)
+                                    selected
+                                @endif value="0">Admin</option>
+                                <option 
+                                @if ($item->role ==  1)
+                                    selected
+                                @endif value="1">Superadmin</option>
+                            </select>
+                        </td>
                         <td>
                             @if ($item->status == 1)
                             <span class="badge bg-label-success me-1">Active</span>
@@ -46,7 +58,8 @@
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item btn btn-outline-warning" href="javascript:void(0);"><i
                                             class="bx bx-edit-alt me-1"></i> Edit</a>
-                                    <a  id="showToastPlacement" onclick="return confirm('Do you want to delete this data?')"
+                                    <a id="showToastPlacement"
+                                        onclick="return confirm('Do you want to delete this data?')"
                                         class="dropdown-item btn btn-outline-danger"
                                         href="{{ route('staff.delete' , $item->id) }}"><i class="bx bx-trash me-1"></i>
                                         Delete</a>
@@ -73,4 +86,23 @@
         </div>
     </div>
 </div>
+@section('script')
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="{{asset('js/alert-action.js')}}"></script>
+<script>
+    $(document).ready(function() {
+    $('.form-select').on('change', function() {
+        // alert($(this).data('id'));
+        id = $(this).data('id');
+        status = $(this).val();
+        $.get("<?= route('staff.updateRole') ?>", {
+            id: id,
+            status: status
+        }, function($data) {
+            configAlert($data);
+        })
+    });
+});
+</script>
+@endsection
 @endsection

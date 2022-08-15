@@ -167,7 +167,7 @@ input[type=number]::-webkit-outer-spin-button {
   box-sizing: border-box;
 }
 
-.number-input button {
+.number-input a {
   outline: none;
   -webkit-appearance: none;
   background-color: transparent;
@@ -179,6 +179,8 @@ input[type=number]::-webkit-outer-spin-button {
   cursor: pointer;
   margin: 0;
   position: relative;
+  text-align: center;
+  line-height: 40px;
 }
 
 .number-input button:after {
@@ -227,6 +229,54 @@ input[type=number]::-webkit-outer-spin-button {
   color: var(--color-white);
   transition: all ease-in 0.3s;
   cursor: pointer;
+}
+
+.product-atribute_box {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.product-atribute_box p {
+  font-weight: 600;
+  color: #333;
+
+}
+
+.product-atribute_list-color {
+  display: flex;
+  justify-content: start;
+  list-style-type: none;
+  margin-left: 30px;
+}
+
+.product-atribute_list-color label {
+  width: 30px;
+  height: 30px;
+  margin-right: 20px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.product-atribute_list-size label{
+    margin-left: 20px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.bg-black{
+  background-color: #000;
+}
+
+.bg-orange{
+  background-color: orange;
+}
+
+.bg-red{
+  background-color: red;
 }
 
 /*  TAB */
